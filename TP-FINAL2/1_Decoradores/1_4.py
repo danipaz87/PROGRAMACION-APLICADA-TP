@@ -1,28 +1,19 @@
 """Hacer un decorador para verificar las precondiciones antes de ejecutar una función."""
+def verif_cond_div(funcion):
+    def wrapper(*args, **kwargs):
+        for div in args:
+            if div > 0:
+                print("El resultado es positivo")
+            elif div < 0: 
+                print("El resultado es negativo")
+            else:
+                print("El resultado es cero o no se puede realizar la divición")
 
-import functools
+        return funcion(*args, **kwargs)
+    return wrapper
 
-def verificar_precondiciones(precondiciones):
-    def decorador(funcion):
-        def wrapper(*args, **kwargs):
-            # Verifica las precondiciones
-            for precondicion in precondiciones:
-                if not precondicion(*args):
-                    raise ValueError(f"La precondición {precondicion.__name__} no se cumple")
+@verif_cond_div
+def div(a,b):
+    return a/b
 
-            # Devuelve el resultado de la función
-            resultado = funcion(*args, **kwargs)
-            return resultado
-
-        return wrapper
-
-    return decorador
-
-@verificar_precondiciones([
-    lambda x, y: x >= 0 and y >= 0,
-    lambda longitud_args: longitud_args >= 2,
-])
-def sumar(x, y):
-    return x + y
-
-print(sumar(1, 2))
+print(div(-5,1))
